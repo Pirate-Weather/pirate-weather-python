@@ -4,7 +4,7 @@ pytz==2024.2
 pytest-asyncio==0.24.0 
 aioresponses==0.7.6 
 mock==3.0.5 
-pytest==5.0.1 
+pytest==8.3.3 
 yarl==1.14.0 
 codecov==2.1.13 
 pytest-cov==5.0.0
