@@ -9,7 +9,7 @@ yarl==1.14.0
 codecov==2.1.13 
 pytest-cov==2.8.1
 flake8==3.7.9
-pylint==2.4.4
+pylint==3.3.1
 isort==4.3.21
 pytest-cov==2.8.1
 pytest-html==2.0.1
