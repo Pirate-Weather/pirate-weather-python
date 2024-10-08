@@ -114,7 +114,9 @@ def test_forecast_daily(forecast):
 
 @pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_alerts(forecast):
-    for f_item, d_item in zip(forecast.alerts, copy.deepcopy(DATA["alerts"]), strict=False):
+    for f_item, d_item in zip(
+        forecast.alerts, copy.deepcopy(DATA["alerts"]), strict=False
+    ):
         for key in d_item:
             forecast_key = utils.snake_case_key(key)
             if isinstance(getattr(f_item, forecast_key), datetime):
