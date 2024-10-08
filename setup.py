@@ -2,7 +2,7 @@ import os
 
 from setuptools import find_packages, setup
 
-__version__ = "0.0.6"
+__version__ = "0.0.9"
 
 
 with open(os.path.join(
@@ -15,7 +15,7 @@ setup(
     version=__version__,
     name="pirate-weather-python",
     packages=find_packages(),
-    install_requires=["requests==2.21.0", "pytz==2019.1", "aiohttp==3.5.4"],
+    install_requires=["requests==2.21.0", "pytz==2019.1", "aiohttp==3.8.5"],
     description="The Pirate Weather API wrapper",
     long_description="View on github",
     author="bakobako",
