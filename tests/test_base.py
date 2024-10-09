@@ -1,18 +1,12 @@
 import os
 import sys
-from typing import List
 
 import pytest
 
 from pirate_weather.base import AutoInit, BaseWeather
 from pirate_weather.utils import undo_snake_case_key
 
-sys.path.insert(
-    0,
-    os.path.realpath(
-        os.path.join(os.path.dirname(__file__), "..")
-    )
-)
+sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 def test_undo_snake_case_key():
@@ -36,7 +30,7 @@ def test_base_weather():
             self.test_field = test_field
 
     class TestBaseWeather(BaseWeather):
-        data: List[TestDataBaseWeather]
+        data: list[TestDataBaseWeather]
         data_class = TestDataBaseWeather
 
     test_base_weather_obj = TestBaseWeather(

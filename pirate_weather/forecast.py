@@ -1,5 +1,3 @@
-from typing import List
-
 from . import base
 
 
@@ -37,7 +35,7 @@ class MinutelyForecastItem(base.AutoInit):
 
 
 class MinutelyForecast(base.BaseWeather):
-    data: List[MinutelyForecastItem]
+    data: list[MinutelyForecastItem]
     data_class = MinutelyForecastItem
 
 
@@ -64,7 +62,7 @@ class HourlyForecastItem(base.AutoInit):
 
 
 class HourlyForecast(base.BaseWeather):
-    data: List[HourlyForecastItem]
+    data: list[HourlyForecastItem]
     data_class = HourlyForecastItem
 
 
@@ -112,7 +110,7 @@ class DailyForecastItem(base.AutoInit):
 
 
 class DailyForecast(base.BaseWeather):
-    data: List[DailyForecastItem]
+    data: list[DailyForecastItem]
     data_class = DailyForecastItem
 
 
@@ -127,7 +125,7 @@ class Alert(base.AutoInit):
 
 
 class Flags(base.AutoInit):
-    sources: List[str]
+    sources: list[str]
     sources_class = str
     nearest__station: float
     pirate_weather__unavailable: bool
@@ -142,36 +140,34 @@ class Forecast:
     minutely: MinutelyForecast
     hourly: HourlyForecast
     daily: DailyForecast
-    alerts: List[Alert]
+    alerts: list[Alert]
     flags: Flags
     offset: int
 
     def __init__(
-            self,
-            latitude: float,
-            longitude: float,
-            timezone: str,
-            currently: dict = None,
-            minutely: dict = None,
-            hourly: dict = None,
-            daily: dict = None,
-            alerts: [dict] = None,
-            flags: dict = None,
-            offset: int = None,
-            elevation: int = None,
+        self,
+        latitude: float,
+        longitude: float,
+        timezone: str,
+        currently: dict = None,
+        minutely: dict = None,
+        hourly: dict = None,
+        daily: dict = None,
+        alerts: [dict] = None,
+        flags: dict = None,
+        offset: int = None,
+        elevation: int = None,
     ):
         self.latitude = latitude
         self.longitude = longitude
         self.timezone = timezone
 
-        self.currently = CurrentlyForecast(
-            timezone=timezone, **(currently or {}))
+        self.currently = CurrentlyForecast(timezone=timezone, **(currently or {}))
         self.minutely = MinutelyForecast(timezone=timezone, **(minutely or {}))
         self.hourly = HourlyForecast(timezone=timezone, **(hourly or {}))
         self.daily = DailyForecast(timezone=timezone, **(daily or {}))
 
-        self.alerts = [Alert(timezone=timezone, **alert)
-                       for alert in (alerts or [])]
+        self.alerts = [Alert(timezone=timezone, **alert) for alert in (alerts or [])]
         self.flags = Flags(timezone=timezone, **(flags or {}))
 
         self.offset = offset

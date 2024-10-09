@@ -1,3 +1,5 @@
+import json
+
 import requests
 from aiohttp import ClientSession
 
@@ -28,12 +30,7 @@ class RequestManger(BaseRequestManger):
 
 
 class RequestMangerAsync(BaseRequestManger):
-    async def make_request(
-            self,
-            url: str,
-            session: ClientSession,
-            **params
-    ):
+    async def make_request(self, url: str, session: ClientSession, **params):
         assert isinstance(session, ClientSession)
 
         for key in list(params.keys()):
@@ -42,11 +39,9 @@ class RequestMangerAsync(BaseRequestManger):
             elif isinstance(params[key], list):
                 params[key] = ",".join(params[key])
 
-        async with session.get(
-                url, params=params, headers=self.headers
-        ) as resp:
+        async with session.get(url, params=params, headers=self.headers) as resp:
             response = await resp.json()
-            if "error" in response:
-                raise PirateWeatherException(response["code"], response["error"])
+            if resp.status != 200:
+                raise PirateWeatherException(resp.status, json.loads(resp._body))
         response["timezone"] = params.get("timezone") or response["timezone"]
         return response
