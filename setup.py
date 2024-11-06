@@ -17,7 +17,7 @@ setup(
     description="The Pirate Weather API wrapper",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    author="alexander0042",
+    author="Pirate-Weather",
     url=repo_url,
     download_url=f"{repo_url}/archive/{__version__}.tar.gz",
     license="GPLv3 License",
