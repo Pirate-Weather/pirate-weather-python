@@ -2,6 +2,11 @@ name: Publish Python 🐍 distribution 📦 to PyPI
 
 on: push
 
+permissions:
+  contents: write # only for delete-branch option
+  issues: write
+  pull-requests: write
+
 jobs:
   build:
     name: Build distribution 📦
