@@ -11,7 +11,7 @@ with open(os.path.join(os.path.abspath(os.path.dirname(__file__)), "README.md"))
 repo_url = "https://github.com/Pirate-Weather/pirate-weather-python"
 setup(
     version=__version__,
-    name="pirate-weather-python",
+    name="pirateweather",
     packages=find_packages(),
     install_requires=["requests==2.32.3", "pytz==2024.2", "aiohttp==3.11.11"],
     description="The Pirate Weather API wrapper",
@@ -25,7 +25,7 @@ setup(
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.12",
         "Topic :: Software Development :: Libraries :: Python Modules",
     ],
 )
