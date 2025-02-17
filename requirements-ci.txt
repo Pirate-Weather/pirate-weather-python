@@ -8,7 +8,7 @@ pytest==8.3.4
 yarl==1.18.3 
 codecov==2.1.13 
 pytest-cov==6.0.0
-flake8==7.1.1
+flake8==7.1.2
 pylint==3.3.4
 isort==6.0.0
 pytest-cov==6.0.0
