@@ -15,7 +15,7 @@ weather information from around the globe.
 ### Installation
 
 ```
-pip3 install pirate_weather_python
+pip3 install pirateweather
 ```
 
 ### Get started
