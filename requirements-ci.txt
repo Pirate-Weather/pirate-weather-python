@@ -4,13 +4,13 @@ pytz==2025.2
 pytest-asyncio==1.1.0 
 aioresponses==0.7.8 
 mock==5.2.0 
-pytest==8.4.1 
+pytest==8.4.2 
 yarl==1.20.1 
 codecov==2.1.13 
-pytest-cov==6.2.1
+pytest-cov==6.3.0
 flake8==7.3.0
 pylint==3.3.8
 isort==6.0.1
-pytest-cov==6.2.1
+pytest-cov==6.3.0
 pytest-html==4.1.1
-ruff==0.12.11
+ruff==0.12.12
