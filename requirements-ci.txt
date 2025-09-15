@@ -1,7 +1,7 @@
 aiohttp==3.12.15
 requests==2.32.5 
 pytz==2025.2 
-pytest-asyncio==1.1.0 
+pytest-asyncio==1.2.0 
 aioresponses==0.7.8 
 mock==5.2.0 
 pytest==8.4.2 
@@ -13,4 +13,4 @@ pylint==3.3.8
 isort==6.0.1
 pytest-cov==6.3.0
 pytest-html==4.1.1
-ruff==0.12.12
+ruff==0.13.0
