@@ -1,4 +1,4 @@
-aiohttp==3.13.1
+aiohttp==3.13.2
 requests==2.32.5 
 pytz==2025.2 
 pytest-asyncio==1.2.0 
@@ -13,4 +13,4 @@ pylint==4.0.2
 isort==7.0.0
 pytest-cov==7.0.0
 pytest-html==4.1.1
-ruff==0.14.2
+ruff==0.14.3
