@@ -159,6 +159,38 @@ DATA = {
             }
         ],
     },
+    "day_night": {
+        "summary": "Test day/night forecast",
+        "icon": "partly-cloudy-day",
+        "data": [
+            {
+                "time": 1765216800,
+                "summary": "Partly Cloudy",
+                "icon": "partly-cloudy-day",
+                "precipIntensity": 0.0,
+                "precipIntensityMax": 0.0,
+                "precipProbability": 0.0,
+                "precipType": "snow",
+                "temperature": -7.04,
+                "apparentTemperature": -13.35,
+                "dewPoint": -8.0,
+                "humidity": 0.91,
+                "pressure": 1008.55,
+                "windSpeed": 21.6,
+                "windGust": 33.84,
+                "windBearing": 310,
+                "cloudCover": 0.58,
+                "uvIndex": 1.24,
+                "visibility": 16.09,
+                "ozone": 406.56,
+                "smoke": 0.0,
+                "solar": 227.36,
+                "feelsLike": -14.45,
+                "cape": 0,
+                "fireIndex": 6.0,
+            }
+        ],
+    },
     "alerts": [
         {
             "title": "special weather statement in effect",

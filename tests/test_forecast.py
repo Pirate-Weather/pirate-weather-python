@@ -33,11 +33,12 @@ def get_forecast_async():
         with aioresponses.aioresponses() as resp:
             resp.get(re.compile(".+"), status=200, payload=copy.deepcopy(DATA))
 
-            result = await pirate_weather.get_forecast(
-                DATA["latitude"],
-                DATA["longitude"],
-                client_session=aiohttp.ClientSession(),
-            )
+            async with aiohttp.ClientSession() as session:
+                result = await pirate_weather.get_forecast(
+                    DATA["latitude"],
+                    DATA["longitude"],
+                    client_session=session,
+                )
 
         return result
 
@@ -102,6 +103,22 @@ def test_forecast_daily(forecast):
 
     for f_item, d_item in zip(
         forecast.daily.data, copy.deepcopy(DATA["daily"]["data"]), strict=False
+    ):
+        for key in d_item:
+            forecast_key = utils.snake_case_key(key)
+            if isinstance(getattr(f_item, forecast_key), datetime):
+                d_item[key] = get_datetime_from_unix(d_item[key])
+            assert hasattr(f_item, forecast_key)
+            assert getattr(f_item, forecast_key) == d_item[key]
+
+
+@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
+def test_forecast_day_night(forecast):
+    assert forecast.day_night.summary == DATA["day_night"]["summary"]
+    assert forecast.day_night.icon == DATA["day_night"]["icon"]
+
+    for f_item, d_item in zip(
+        forecast.day_night.data, copy.deepcopy(DATA["day_night"]["data"]), strict=False
     ):
         for key in d_item:
             forecast_key = utils.snake_case_key(key)

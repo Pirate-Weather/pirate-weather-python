@@ -5,8 +5,11 @@ This library for the [Pirate Weather API](https://pirateweather.net) which is an
 API, and provides access to detailed
 weather information from around the globe.
 
+**Now supporting Pirate Weather API v2.8+** with new data fields including smoke levels, solar radiation, fire indices, and detailed precipitation breakdowns.
+
 * [Installation](#installation)
 * [Get started](#get-started)
+* [New Features](#new-features)
 * [Contact us](#contact-us)
 * [License](#license)
 
@@ -136,6 +139,73 @@ async def main(api_key):
 
 api_key = "0123456789"
 asyncio.run(main(api_key))
+```
+
+### New Features
+
+#### API v2.8+ Support
+
+This library now supports all Pirate Weather API v2.8+ fields:
+
+**New Weather Data Fields:**
+- `smoke` - Air quality smoke levels (µg/m³)
+- `solar` - Solar radiation (W/m²)
+- `feelsLike` - Apparent temperature based on wind and humidity
+- `cape` - Convective Available Potential Energy
+- `fireIndex` - Fire weather index
+- `liquidAccumulation`, `snowAccumulation`, `iceAccumulation` - Precipitation by type
+- `rainIntensity`, `snowIntensity`, `iceIntensity` - Intensity by precipitation type
+- `currentDayIce`, `currentDayLiquid`, `currentDaySnow` - Accumulations for the current day
+- `dawnTime`, `duskTime` - Civil twilight times
+
+**New Metadata Fields:**
+- `sourceTimes` - Model update timestamps
+- `sourceIDX` - Grid coordinates for each model
+- `version` - API version
+- `processTime` - Request processing time
+- `ingestVersion` - Data ingest version
+- `nearestCity`, `nearestCountry`, `nearestSubNational` - Location information
+
+**Day/Night Forecast Block:**
+
+The library now supports the optional `day_night` forecast block which provides 12-hour forecast periods:
+
+```python
+forecast = pirate_weather.get_forecast(latitude, longitude)
+
+# Access day/night forecast data
+for period in forecast.day_night.data:
+    print(f"Time: {period.time}, Temp: {period.temperature}, Smoke: {period.smoke}")
+```
+
+**Example accessing new fields:**
+
+```python
+forecast = pirate_weather.get_forecast(latitude, longitude)
+
+# Current conditions with new fields
+print(f"Current smoke level: {forecast.currently.smoke} µg/m³")
+print(f"Solar radiation: {forecast.currently.solar} W/m²")
+print(f"Feels like: {forecast.currently.feels_like}°")
+print(f"Fire index: {forecast.currently.fire_index}")
+
+# Hourly forecasts with precipitation breakdowns
+for hour in forecast.hourly.data:
+    if hour.rain_intensity > 0:
+        print(f"Rain intensity: {hour.rain_intensity} mm/h")
+    if hour.snow_intensity > 0:
+        print(f"Snow intensity: {hour.snow_intensity} cm/h")
+
+# Daily forecasts with new max fields
+for day in forecast.daily.data:
+    print(f"Max smoke: {day.smoke_max} at {day.smoke_max_time}")
+    print(f"Max solar: {day.solar_max} at {day.solar_max_time}")
+    print(f"Dawn: {day.dawn_time}, Dusk: {day.dusk_time}")
+
+# Metadata
+print(f"API Version: {forecast.flags.version}")
+print(f"Nearest City: {forecast.flags.nearest_city}")
+print(f"Process Time: {forecast.flags.process_time}ms")
 ```
 
 ### License.
