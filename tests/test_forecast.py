@@ -50,7 +50,7 @@ def test_forecast_base_fields(forecast):
     assert isinstance(forecast, Forecast)
     assert forecast.latitude == DATA["latitude"]
     assert forecast.longitude == DATA["longitude"]
-    assert forecast.timezone == "America/New_York"
+    assert forecast.timezone == DATA["timezone"]
 
 
 @pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])

@@ -25,6 +25,9 @@ class CurrentlyForecast(base.AutoInit):
     visibility: float
     ozone: float
     # New fields from API v2+
+    rain_intensity: float = None
+    snow_intensity: float = None
+    ice_intensity: float = None
     smoke: float = None
     solar: float = None
     feels_like: float = None
@@ -34,6 +37,9 @@ class CurrentlyForecast(base.AutoInit):
     snow_accumulation: float = None
     ice_accumulation: float = None
     station_pressure: float = None
+    current_day_ice: float = None
+    current_day_liquid: float = None
+    current_day_snow: float = None
 
 
 class MinutelyForecastItem(base.AutoInit):
@@ -42,6 +48,10 @@ class MinutelyForecastItem(base.AutoInit):
     precip_intensity_error: float
     precip_probability: float
     precip_type: str
+    # New fields from API v2+
+    rain_intensity: float = None
+    snow_intensity: float = None
+    sleet_intensity: float = None
 
 
 class MinutelyForecast(base.BaseWeather):
@@ -54,6 +64,7 @@ class HourlyForecastItem(base.AutoInit):
     summary: str = None
     icon: str
     precip_intensity: float
+    precip_intensity_error: float = None
     precip_probability: float
     precip_type: str
     precipAccumulation: float
@@ -133,6 +144,15 @@ class DailyForecastItem(base.AutoInit):
     apparent_temperature_max: float
     apparent_temperature_max_time: int
     # New fields from API v2+
+    rain_intensity: float = None
+    rain_intensity_max: float = None
+    rain_intensity_max_time: int = None
+    snow_intensity: float = None
+    snow_intensity_max: float = None
+    snow_intensity_max_time: int = None
+    ice_intensity: float = None
+    ice_intensity_max: float = None
+    ice_intensity_max_time: int = None
     smoke_max: float = None
     smoke_max_time: int = None
     solar_max: float = None
@@ -144,12 +164,6 @@ class DailyForecastItem(base.AutoInit):
     liquid_accumulation: float = None
     snow_accumulation: float = None
     ice_accumulation: float = None
-    rain_intensity_max: float = None
-    rain_intensity_max_time: int = None
-    snow_intensity_max: float = None
-    snow_intensity_max_time: int = None
-    ice_intensity_max: float = None
-    ice_intensity_max_time: int = None
     current_day_ice: float = None
     current_day_liquid: float = None
     current_day_snow: float = None
@@ -225,7 +239,7 @@ class Flags(base.AutoInit):
     units: str
     # New fields from API v2+
     source_times: dict = None
-    source_idx: dict = None
+    source_i_d_x: dict = None
     version: str = None
     process_time: float = None
     ingest_version: str = None
