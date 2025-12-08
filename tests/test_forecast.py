@@ -50,8 +50,7 @@ def forecast_async():
 def forecast(request, forecast_sync, forecast_async):
     if request.param == "sync":
         return forecast_sync
-    else:
-        return forecast_async
+    return forecast_async
 
 
 def test_forecast_base_fields(forecast):
