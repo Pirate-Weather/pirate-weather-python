@@ -162,6 +162,51 @@ class DailyForecast(base.BaseWeather):
     data_class = DailyForecastItem
 
 
+# DayNight block is similar to hourly but has some additional fields
+class DayNightForecastItem(base.AutoInit):
+    time: int
+    summary: str = None
+    icon: str
+    precip_intensity: float
+    precip_intensity_max: float = None
+    precip_probability: float
+    precip_type: str
+    precipAccumulation: float
+    temperature: float
+    apparent_temperature: float
+    dew_point: float
+    humidity: float
+    pressure: float
+    wind_speed: float
+    wind_gust: float
+    wind_bearing: int
+    cloud_cover: float
+    uv_index: int
+    visibility: float
+    ozone: float
+    # Fields that may be in day_night
+    smoke: float = None
+    solar: float = None
+    feels_like: float = None
+    cape: float = None
+    fire_index: float = None
+    liquid_accumulation: float = None
+    snow_accumulation: float = None
+    ice_accumulation: float = None
+    rain_intensity: float = None
+    snow_intensity: float = None
+    ice_intensity: float = None
+    rain_intensity_max: float = None
+    snow_intensity_max: float = None
+    ice_intensity_max: float = None
+    station_pressure: float = None
+
+
+class DayNightForecast(base.BaseWeather):
+    data: list[DayNightForecastItem]
+    data_class = DayNightForecastItem
+
+
 class Alert(base.AutoInit):
     title: str
     regions: list
@@ -197,6 +242,7 @@ class Forecast:
     minutely: MinutelyForecast
     hourly: HourlyForecast
     daily: DailyForecast
+    day_night: DayNightForecast
     alerts: list[Alert]
     flags: Flags
     offset: int
@@ -210,6 +256,7 @@ class Forecast:
         minutely: dict = None,
         hourly: dict = None,
         daily: dict = None,
+        day_night: dict = None,
         alerts: [dict] = None,
         flags: dict = None,
         offset: int = None,
@@ -223,6 +270,7 @@ class Forecast:
         self.minutely = MinutelyForecast(timezone=timezone, **(minutely or {}))
         self.hourly = HourlyForecast(timezone=timezone, **(hourly or {}))
         self.daily = DailyForecast(timezone=timezone, **(daily or {}))
+        self.day_night = DayNightForecast(timezone=timezone, **(day_night or {}))
 
         self.alerts = [Alert(timezone=timezone, **alert) for alert in (alerts or [])]
         self.flags = Flags(timezone=timezone, **(flags or {}))
