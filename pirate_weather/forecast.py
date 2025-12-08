@@ -24,6 +24,22 @@ class CurrentlyForecast(base.AutoInit):
     uv_index: int
     visibility: float
     ozone: float
+    # New fields from API v2+
+    rain_intensity: float = None
+    snow_intensity: float = None
+    ice_intensity: float = None
+    smoke: float = None
+    solar: float = None
+    feels_like: float = None
+    cape: float = None
+    fire_index: float = None
+    liquid_accumulation: float = None
+    snow_accumulation: float = None
+    ice_accumulation: float = None
+    station_pressure: float = None
+    current_day_ice: float = None
+    current_day_liquid: float = None
+    current_day_snow: float = None
 
 
 class MinutelyForecastItem(base.AutoInit):
@@ -32,6 +48,10 @@ class MinutelyForecastItem(base.AutoInit):
     precip_intensity_error: float
     precip_probability: float
     precip_type: str
+    # New fields from API v2+
+    rain_intensity: float = None
+    snow_intensity: float = None
+    sleet_intensity: float = None
 
 
 class MinutelyForecast(base.BaseWeather):
@@ -44,6 +64,7 @@ class HourlyForecastItem(base.AutoInit):
     summary: str = None
     icon: str
     precip_intensity: float
+    precip_intensity_error: float = None
     precip_probability: float
     precip_type: str
     precipAccumulation: float
@@ -59,6 +80,21 @@ class HourlyForecastItem(base.AutoInit):
     uv_index: int
     visibility: float
     ozone: float
+    # New fields from API v2+
+    nearest_storm_distance: int = None
+    nearest_storm_bearing: int = None
+    smoke: float = None
+    solar: float = None
+    feels_like: float = None
+    cape: float = None
+    fire_index: float = None
+    liquid_accumulation: float = None
+    snow_accumulation: float = None
+    ice_accumulation: float = None
+    rain_intensity: float = None
+    snow_intensity: float = None
+    ice_intensity: float = None
+    station_pressure: float = None
 
 
 class HourlyForecast(base.BaseWeather):
@@ -107,11 +143,82 @@ class DailyForecastItem(base.AutoInit):
     apparent_temperature_min_time: int
     apparent_temperature_max: float
     apparent_temperature_max_time: int
+    # New fields from API v2+
+    rain_intensity: float = None
+    rain_intensity_max: float = None
+    rain_intensity_max_time: int = None
+    snow_intensity: float = None
+    snow_intensity_max: float = None
+    snow_intensity_max_time: int = None
+    ice_intensity: float = None
+    ice_intensity_max: float = None
+    ice_intensity_max_time: int = None
+    smoke_max: float = None
+    smoke_max_time: int = None
+    solar_max: float = None
+    solar_max_time: int = None
+    cape_max: float = None
+    cape_max_time: int = None
+    fire_index_max: float = None
+    fire_index_max_time: int = None
+    liquid_accumulation: float = None
+    snow_accumulation: float = None
+    ice_accumulation: float = None
+    current_day_ice: float = None
+    current_day_liquid: float = None
+    current_day_snow: float = None
+    dawn_time: int = None
+    dusk_time: int = None
 
 
 class DailyForecast(base.BaseWeather):
     data: list[DailyForecastItem]
     data_class = DailyForecastItem
+
+
+# DayNight block is similar to hourly but has some additional fields
+class DayNightForecastItem(base.AutoInit):
+    time: int
+    summary: str = None
+    icon: str
+    precip_intensity: float
+    precip_intensity_max: float = None
+    precip_probability: float
+    precip_type: str
+    precipAccumulation: float
+    temperature: float
+    apparent_temperature: float
+    dew_point: float
+    humidity: float
+    pressure: float
+    wind_speed: float
+    wind_gust: float
+    wind_bearing: int
+    cloud_cover: float
+    uv_index: int
+    visibility: float
+    ozone: float
+    # Fields that may be in day_night
+    smoke: float = None
+    solar: float = None
+    feels_like: float = None
+    cape: float = None
+    fire_index: float = None
+    liquid_accumulation: float = None
+    snow_accumulation: float = None
+    ice_accumulation: float = None
+    rain_intensity: float = None
+    snow_intensity: float = None
+    ice_intensity: float = None
+    rain_intensity_max: float = None
+    snow_intensity_max: float = None
+    ice_intensity_max: float = None
+    station_pressure: float = None
+
+
+class DayNightForecast(base.BaseWeather):
+    data: list[DayNightForecastItem]
+    data_class = DayNightForecastItem
 
 
 class Alert(base.AutoInit):
@@ -130,6 +237,15 @@ class Flags(base.AutoInit):
     nearest__station: float
     pirate_weather__unavailable: bool
     units: str
+    # New fields from API v2+
+    source_times: dict = None
+    source_i_d_x: dict = None
+    version: str = None
+    process_time: float = None
+    ingest_version: str = None
+    nearest_city: str = None
+    nearest_country: str = None
+    nearest_sub_national: str = None
 
 
 class Forecast:
@@ -140,6 +256,7 @@ class Forecast:
     minutely: MinutelyForecast
     hourly: HourlyForecast
     daily: DailyForecast
+    day_night: DayNightForecast
     alerts: list[Alert]
     flags: Flags
     offset: int
@@ -153,6 +270,7 @@ class Forecast:
         minutely: dict = None,
         hourly: dict = None,
         daily: dict = None,
+        day_night: dict = None,
         alerts: [dict] = None,
         flags: dict = None,
         offset: int = None,
@@ -166,6 +284,7 @@ class Forecast:
         self.minutely = MinutelyForecast(timezone=timezone, **(minutely or {}))
         self.hourly = HourlyForecast(timezone=timezone, **(hourly or {}))
         self.daily = DailyForecast(timezone=timezone, **(daily or {}))
+        self.day_night = DayNightForecast(timezone=timezone, **(day_night or {}))
 
         self.alerts = [Alert(timezone=timezone, **alert) for alert in (alerts or [])]
         self.flags = Flags(timezone=timezone, **(flags or {}))

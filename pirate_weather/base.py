@@ -30,12 +30,13 @@ class AutoInit:
     def __init__(self, **params):
         try:
             timezone = pytz.timezone(params.pop("timezone", None))
-        except (pytz.UnknownTimeZoneError, AttributeError):
+        except (pytz.UnknownTimeZoneError, AttributeError, TypeError):
             timezone = pytz.UTC
 
-        for field in self.__annotations__:
+        for field in getattr(self.__class__, "__annotations__", {}):
             api_field = undo_snake_case_key(field)
-            if self.__annotations__[field] == datetime:
+            annotations = getattr(self.__class__, "__annotations__", {})
+            if annotations.get(field) == datetime:
                 params[api_field] = get_datetime_from_unix(
                     params.get(api_field), timezone
                 )
