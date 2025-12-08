@@ -20,14 +20,15 @@ from .data import DATA
 sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), "..")))
 
 
-@mock.patch("requests.Session", mokcs.MockSession)
-def get_forecast_sync() -> Forecast:
-    pirate_weather = PirateWeather("api_key")
+@pytest.fixture
+def forecast_sync():
+    with mock.patch("requests.Session", mokcs.MockSession):
+        pirate_weather = PirateWeather("api_key")
+        return pirate_weather.get_forecast(DATA["latitude"], DATA["longitude"])
 
-    return pirate_weather.get_forecast(DATA["latitude"], DATA["longitude"])
 
-
-def get_forecast_async():
+@pytest.fixture
+def forecast_async():
     async def get_async_data():
         pirate_weather = PirateWeatherAsync("api_key")
         with aioresponses.aioresponses() as resp:
@@ -45,7 +46,14 @@ def get_forecast_async():
     return asyncio.run(get_async_data())
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
+@pytest.fixture(params=["sync", "async"])
+def forecast(request, forecast_sync, forecast_async):
+    if request.param == "sync":
+        return forecast_sync
+    else:
+        return forecast_async
+
+
 def test_forecast_base_fields(forecast):
     assert isinstance(forecast, Forecast)
     assert forecast.latitude == DATA["latitude"]
@@ -53,7 +61,6 @@ def test_forecast_base_fields(forecast):
     assert forecast.timezone == DATA["timezone"]
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_currently(forecast):
     f_item, d_item = forecast.currently, copy.deepcopy(DATA["currently"])
     for key in d_item:
@@ -64,7 +71,6 @@ def test_forecast_currently(forecast):
         assert getattr(f_item, forecast_key) == d_item[key]
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_minutely(forecast):
     assert forecast.minutely.summary == DATA["minutely"]["summary"]
     assert forecast.minutely.icon == DATA["minutely"]["icon"]
@@ -80,7 +86,6 @@ def test_forecast_minutely(forecast):
             assert getattr(f_item, forecast_key) == d_item[key]
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_hourly(forecast):
     assert forecast.hourly.summary == DATA["hourly"]["summary"]
     assert forecast.hourly.icon == DATA["hourly"]["icon"]
@@ -96,7 +101,6 @@ def test_forecast_hourly(forecast):
             assert getattr(f_item, forecast_key) == d_item[key]
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_daily(forecast):
     assert forecast.daily.summary == DATA["daily"]["summary"]
     assert forecast.daily.icon == DATA["daily"]["icon"]
@@ -112,7 +116,6 @@ def test_forecast_daily(forecast):
             assert getattr(f_item, forecast_key) == d_item[key]
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_day_night(forecast):
     assert forecast.day_night.summary == DATA["day_night"]["summary"]
     assert forecast.day_night.icon == DATA["day_night"]["icon"]
@@ -128,7 +131,6 @@ def test_forecast_day_night(forecast):
             assert getattr(f_item, forecast_key) == d_item[key]
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_alerts(forecast):
     for f_item, d_item in zip(
         forecast.alerts, copy.deepcopy(DATA["alerts"]), strict=False
@@ -141,7 +143,6 @@ def test_forecast_alerts(forecast):
             assert getattr(f_item, forecast_key) == d_item[key]
 
 
-@pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
 def test_forecast_flags(forecast):
     d_item = copy.deepcopy(DATA["flags"])
     f_item = forecast.flags
