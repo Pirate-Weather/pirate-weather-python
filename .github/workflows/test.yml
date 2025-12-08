@@ -2,7 +2,6 @@ name: "Tests"
 
 on:
   pull_request:
-    types: [opened]
 
 permissions:
   contents: read
@@ -18,7 +17,7 @@ jobs:
       - name: "Set up Python"
         uses: actions/setup-python@v6.1.0
         with:
-          python-version: "3.12.4"
+          python-version: "3.x"
 
       - name: "Install requirements"
         run: |
