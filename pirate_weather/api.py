@@ -228,3 +228,37 @@ class PirateWeatherAsync(BasePirateWeather):
             session=client_session,
         )
         return Forecast(**data)
+
+    async def get_recent_time_machine_forecast(
+        self,
+        latitude: float,
+        longitude: float,
+        time: datetime,
+        client_session: aiohttp.ClientSession,
+        extend: bool = None,
+        lang=Languages.ENGLISH,
+        values_units=Units.AUTO,
+        exclude: [Weather] = None,
+        timezone: str = None,
+    ) -> Forecast:
+        required_time = int(time.timestamp())
+        current_time = int(datetime.now().timestamp())
+        if timezone:
+            tz = pytz.timezone(timezone)
+            current_time = datetime.now(tz)
+
+        diff = required_time - current_time
+
+        exclude = self.convert_exclude_param_to_string(exclude)
+
+        url = self.get_url(latitude, longitude, diff)
+        data = await self.request_manager.make_request(
+            url=url,
+            extend=Weather.HOURLY if extend else None,
+            lang=lang,
+            units=values_units,
+            exclude=exclude,
+            timezone=timezone,
+            session=client_session,
+        )
+        return Forecast(**data)

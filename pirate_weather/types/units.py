@@ -4,7 +4,7 @@ from enum import Enum
 class Units(str, Enum):
     AUTO = "auto"
     CA = "ca"
-    UK2 = "uk2"
+    UK = "uk"
     US = "us"
     SI = "si"
 
