@@ -41,8 +41,7 @@ def get_forecast_async():
 
         return result
 
-    loop = asyncio.get_event_loop()
-    return loop.run_until_complete(get_async_data())
+    return asyncio.run(get_async_data())
 
 
 @pytest.mark.parametrize("forecast", [get_forecast_sync(), get_forecast_async()])
