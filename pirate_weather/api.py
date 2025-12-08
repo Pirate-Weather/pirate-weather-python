@@ -157,7 +157,7 @@ class PirateWeather(BasePirateWeather):
         current_time = int(datetime.now().timestamp())
         if timezone:
             tz = pytz.timezone(timezone)
-            current_time = datetime.now(tz)
+            current_time = int(datetime.now(tz).timestamp())
 
         diff = required_time - current_time
 
@@ -245,7 +245,7 @@ class PirateWeatherAsync(BasePirateWeather):
         current_time = int(datetime.now().timestamp())
         if timezone:
             tz = pytz.timezone(timezone)
-            current_time = datetime.now(tz)
+            current_time = int(datetime.now(tz).timestamp())
 
         diff = required_time - current_time
 
