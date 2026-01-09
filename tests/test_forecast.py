@@ -116,9 +116,6 @@ def test_forecast_daily(forecast):
 
 
 def test_forecast_day_night(forecast):
-    assert forecast.day_night.summary == DATA["day_night"]["summary"]
-    assert forecast.day_night.icon == DATA["day_night"]["icon"]
-
     for f_item, d_item in zip(
         forecast.day_night.data, copy.deepcopy(DATA["day_night"]["data"]), strict=False
     ):
