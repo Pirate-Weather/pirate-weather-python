@@ -7,10 +7,10 @@ mock==5.2.0
 pytest==9.0.2 
 yarl==1.23.0 
 codecov==2.1.13 
-pytest-cov==7.0.0
+pytest-cov==7.1.0
 flake8==7.3.0
 pylint==4.0.5
 isort==8.0.1
-pytest-cov==7.0.0
+pytest-cov==7.1.0
 pytest-html==4.2.0
-ruff==0.15.6
+ruff==0.15.7
