@@ -1,13 +1,12 @@
 import asyncio
 import copy
 import os
-import re
 import sys
 from datetime import datetime
 from unittest import mock
+from unittest.mock import AsyncMock
 
 import aiohttp
-import aioresponses
 import pytest
 
 from pirate_weather.api import PirateWeather, PirateWeatherAsync
@@ -31,10 +30,15 @@ def forecast_sync():
 def forecast_async():
     async def get_async_data():
         pirate_weather = PirateWeatherAsync("api_key")
-        with aioresponses.aioresponses() as resp:
-            resp.get(re.compile(".+"), status=200, payload=copy.deepcopy(DATA))
 
-            async with aiohttp.ClientSession() as session:
+        mock_resp = AsyncMock()
+        mock_resp.status = 200
+        mock_resp.json = AsyncMock(return_value=copy.deepcopy(DATA))
+        mock_resp.__aenter__ = AsyncMock(return_value=mock_resp)
+        mock_resp.__aexit__ = AsyncMock(return_value=None)
+
+        async with aiohttp.ClientSession() as session:
+            with mock.patch.object(session, "get", return_value=mock_resp):
                 result = await pirate_weather.get_forecast(
                     DATA["latitude"],
                     DATA["longitude"],
