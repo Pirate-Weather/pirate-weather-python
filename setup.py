@@ -13,7 +13,7 @@ setup(
     version=__version__,
     name="pirateweather",
     packages=find_packages(),
-    install_requires=["requests==2.34.2", "pytz==2026.2", "aiohttp==3.14.0"],
+    install_requires=["requests==2.34.2", "pytz==2026.2", "aiohttp==3.14.1"],
     description="The Pirate Weather API wrapper",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
