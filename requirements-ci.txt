@@ -3,13 +3,13 @@ requests==2.34.2
 pytz==2026.2 
 pytest-asyncio==1.4.0 
 mock==5.2.0 
-pytest==9.0.3 
+pytest==9.1.0 
 yarl==1.24.2 
 codecov==2.1.13 
 pytest-cov==7.1.0
 flake8==7.3.0
-pylint==4.0.5
+pylint==4.0.6
 isort==8.0.1
 pytest-cov==7.1.0
 pytest-html==4.2.0
-ruff==0.15.16
+ruff==0.15.17
