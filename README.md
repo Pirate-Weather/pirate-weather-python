@@ -48,12 +48,13 @@ pirate_weather = PirateWeather(API_KEY)
 latitude = 42.3601
 longitude = -71.0589
 forecast = pirate_weather.get_forecast(
-    latitude, longitude,
+    latitude,
+    longitude,
     extend=False,  # default `False`
     lang=Languages.ENGLISH,  # default `ENGLISH`
     values_units=Units.AUTO,  # default `auto`
     exclude=[Weather.MINUTELY, Weather.ALERTS],  # default `[]`,
-    timezone='UTC'  # default None - will be set by Pirate Weather API automatically
+    timezone="UTC",  # default None - will be set by Pirate Weather API automatically
 )
 ```
 
@@ -73,13 +74,14 @@ t = dt(2022, 5, 6, 12)
 latitude = 42.3601
 longitude = -71.0589
 forecast = pirate_weather.get_time_machine_forecast(
-    latitude, longitude,
+    latitude,
+    longitude,
     extend=False,  # default `False`
     lang=Languages.ENGLISH,  # default `ENGLISH`
     values_units=Units.AUTO,  # default `auto`
     exclude=[Weather.MINUTELY, Weather.ALERTS],  # default `[]`,
-    timezone='UTC',  # default None - will be set by Pirate Weather API automatically
-    time=t
+    timezone="UTC",  # default None - will be set by Pirate Weather API automatically
+    time=t,
 )
 ```
 
@@ -99,13 +101,14 @@ t = dt(2023, 4, 4)
 latitude = 42.3601
 longitude = -71.0589
 forecast = pirate_weather.get_recent_time_machine_forecast(
-    latitude, longitude,
+    latitude,
+    longitude,
     extend=False,  # default `False`
     lang=Languages.ENGLISH,  # default `ENGLISH`
     values_units=Units.AUTO,  # default `auto`
     exclude=[Weather.MINUTELY, Weather.ALERTS],  # default `[]`,
-    timezone='UTC',  # default None - will be set by Pirate Weather API automatically
-    time=t
+    timezone="UTC",  # default None - will be set by Pirate Weather API automatically
+    time=t,
 )
 ```
 
@@ -128,14 +131,16 @@ async def main(api_key):
         latitude = 42.3601
         longitude = -71.0589
         forecast = await pirate_weather.get_forecast(
-            latitude, longitude,
-        extend=False,  # default `False`
-        lang=Languages.ENGLISH,  # default `ENGLISH`
-        values_units=Units.AUTO,  # default `auto`
-        exclude=[Weather.MINUTELY, Weather.ALERTS],  # default `[]`,
-        timezone='UTC',  # default None - will be set by Pirate Weather API automatically
-         client_session=session  # default aiohttp.ClientSession()
+            latitude,
+            longitude,
+            extend=False,  # default `False`
+            lang=Languages.ENGLISH,  # default `ENGLISH`
+            values_units=Units.AUTO,  # default `auto`
+            exclude=[Weather.MINUTELY, Weather.ALERTS],  # default `[]`,
+            timezone="UTC",  # default None - will be set by Pirate Weather API automatically
+            client_session=session,  # default aiohttp.ClientSession()
         )
+
 
 api_key = "0123456789"
 asyncio.run(main(api_key))
