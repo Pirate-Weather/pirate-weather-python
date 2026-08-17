@@ -8,8 +8,8 @@ yarl==1.24.5
 codecov==2.1.13 
 pytest-cov==7.1.0
 flake8==7.3.0
-pylint==4.0.6
+pylint==4.0.7
 isort==8.0.1
 pytest-cov==7.1.0
 pytest-html==4.2.0
-ruff==0.16.2
+ruff==0.16.3
