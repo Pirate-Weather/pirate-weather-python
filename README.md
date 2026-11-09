@@ -5,7 +5,7 @@ This library for the [Pirate Weather API](https://pirateweather.net) which is an
 API, and provides access to detailed
 weather information from around the globe.
 
-**Now supporting Pirate Weather API v2.8+** with new data fields including smoke levels, solar radiation, fire indices, and detailed precipitation breakdowns.
+**Now supporting Pirate Weather API v3** with air quality data, convective indices, and the new `version`, `include`, `extra_vars`, `icon` and `aqi_units` arguments.
 
 * [Installation](#installation)
 * [Get started](#get-started)
@@ -16,6 +16,8 @@ weather information from around the globe.
 ## This library was made by updating the [darksky library by Detrous](https://github.com/Detrous/darksky) so all credits go to them.
 
 ### Installation
+
+Requires Python 3.11 or newer.
 
 ```
 pip3 install pirateweather
@@ -148,6 +150,53 @@ asyncio.run(main(api_key))
 
 ### New Features
 
+#### API v3 Support
+
+**New request parameters** (keyword-only, available on every `get_*` method, sync and async):
+
+| Argument | Type | API parameter | Description |
+|---|---|---|---|
+| `version` | `int` | `version` | Set to `2` to receive fields that are not part of the original Dark Sky spec |
+| `include` | `list[Include]` | `include` | Extra blocks: `DAY_NIGHT_FORECAST`, `AI_MODELS`, `AIR_QUALITY_DETAILS` |
+| `extra_vars` | `list[ExtraVars]` | `extraVars` | Hidden variables, e.g. `STATION_PRESSURE` |
+| `icon` | `Icons` | `icon` | `Icons.PIRATE` for the expanded icon set |
+| `aqi_units` | `AQIUnits` | `aqiunits` | Override the air quality index scale (`US`, `CA`, `UK`, `EU`, ...) |
+
+`exclude` now also accepts `Weather.SUMMARY` and model sources from `Sources` (e.g. `Sources.HRRR`) to force a fallback model.
+
+```python
+from pirate_weather.api import PirateWeather
+from pirate_weather.types.aqi_units import AQIUnits
+from pirate_weather.types.extra_vars import ExtraVars
+from pirate_weather.types.icons import Icons
+from pirate_weather.types.include import Include
+
+forecast = PirateWeather(API_KEY).get_forecast(
+    latitude,
+    longitude,
+    version=2,
+    include=[Include.DAY_NIGHT_FORECAST, Include.AIR_QUALITY_DETAILS],
+    extra_vars=[ExtraVars.STATION_PRESSURE],
+    icon=Icons.PIRATE,
+    aqi_units=AQIUnits.CA,
+)
+
+print(forecast.currently.air_quality_index, forecast.currently.pm25)
+print(forecast.currently.lifted_index, forecast.currently.k_index)
+for day in forecast.daily.data:
+    print(day.air_quality_index_max, day.lifted_index_min, day.k_index_max)
+```
+
+**New v3 data fields:**
+- `liftedIndex`, `kIndex`, `verticalVelocity`, `convectiveInhibition` - Convective indices (currently, hourly, day_night)
+- `airQualityIndex` - Air quality index (currently, hourly, day_night, daily)
+- `pm25`, `pm10`, `ozoneConcentration`, `no2Concentration`, `so2Concentration`, `coConcentration` - Pollutant concentrations (requires `Include.AIR_QUALITY_DETAILS`)
+- Daily: `liftedIndexMin`, `kIndexMax`, `verticalVelocityMin`, `convectiveInhibitionMax`, `airQualityIndexMax`, `airQualityIndexMin`, `precipIntensityMin` (each with a matching `*Time` field)
+
+Fields are exposed in snake_case, e.g. `airQualityIndex` -> `air_quality_index`. Daily max/min values the API cannot compute are returned as `-999`.
+
+> `precipAccumulation` is now exposed as `precip_accumulation` like every other field. The old `precipAccumulation` attribute still works as an alias.
+
 #### API v2.8+ Support
 
 This library now supports all Pirate Weather API v2.8+ fields:
@@ -173,10 +222,12 @@ This library now supports all Pirate Weather API v2.8+ fields:
 
 **Day/Night Forecast Block:**
 
-The library now supports the optional `day_night` forecast block which provides 12-hour forecast periods:
+The library now supports the optional `day_night` forecast block which provides 12-hour forecast periods (request it with `include=[Include.DAY_NIGHT_FORECAST]`):
 
 ```python
-forecast = pirate_weather.get_forecast(latitude, longitude)
+forecast = pirate_weather.get_forecast(
+    latitude, longitude, include=[Include.DAY_NIGHT_FORECAST]
+)
 
 # Access day/night forecast data
 for period in forecast.day_night.data:

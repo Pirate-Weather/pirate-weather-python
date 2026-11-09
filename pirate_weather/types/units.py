@@ -1,7 +1,11 @@
-from enum import Enum
+"""Unit systems supported by the API."""
+
+from enum import StrEnum
 
 
-class Units(str, Enum):
+class Units(StrEnum):
+    """Unit systems supported by the ``units`` parameter."""
+
     AUTO = "auto"
     CA = "ca"
     UK = "uk"
@@ -10,4 +14,5 @@ class Units(str, Enum):
 
     @classmethod
     def list(cls):
-        return list(map(lambda c: c.value, cls))
+        """Return the values of every member."""
+        return [c.value for c in cls]
