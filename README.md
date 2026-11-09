@@ -10,7 +10,6 @@ weather information from around the globe.
 * [Installation](#installation)
 * [Get started](#get-started)
 * [New Features](#new-features)
-* [Contact us](#contact-us)
 * [License](#license)
 
 ## This library was made by updating the [darksky library by Detrous](https://github.com/Detrous/darksky) so all credits go to them.
@@ -27,12 +26,6 @@ pip3 install pirateweather
 
 Before you start using this library, you need to get your API key
 [here](https://pirate-weather.apiable.io/).
-
-#### Notes on functionality
-
-The Pirate Weather timemachine data is limited in availability, it is only possible to fetch data about 1-2 months ago.
-For recent historical weather data use the get_recent_time_machine_forecast which will have data from about 1-5 days prior.
-Unfortunately, at the time of writing this it is not possible to get data from 2 weeks ago for example.
 
 All classes are fully annotated, source code is your best doc : )
 
@@ -150,7 +143,7 @@ asyncio.run(main(api_key))
 
 ### New Features
 
-#### API v3 Support
+#### API v2.10 Support
 
 **New request parameters** (keyword-only, available on every `get_*` method, sync and async):
 
@@ -187,7 +180,7 @@ for day in forecast.daily.data:
     print(day.air_quality_index_max, day.lifted_index_min, day.k_index_max)
 ```
 
-**New v3 data fields:**
+**New data fields:**
 - `liftedIndex`, `kIndex`, `verticalVelocity`, `convectiveInhibition` - Convective indices (currently, hourly, day_night)
 - `airQualityIndex` - Air quality index (currently, hourly, day_night, daily)
 - `pm25`, `pm10`, `ozoneConcentration`, `no2Concentration`, `so2Concentration`, `coConcentration` - Pollutant concentrations (requires `Include.AIR_QUALITY_DETAILS`)
@@ -196,29 +189,6 @@ for day in forecast.daily.data:
 Fields are exposed in snake_case, e.g. `airQualityIndex` -> `air_quality_index`. Daily max/min values the API cannot compute are returned as `-999`.
 
 > `precipAccumulation` is now exposed as `precip_accumulation` like every other field. The old `precipAccumulation` attribute still works as an alias.
-
-#### API v2.8+ Support
-
-This library now supports all Pirate Weather API v2.8+ fields:
-
-**New Weather Data Fields:**
-- `smoke` - Air quality smoke levels (µg/m³)
-- `solar` - Solar radiation (W/m²)
-- `feelsLike` - Apparent temperature based on wind and humidity
-- `cape` - Convective Available Potential Energy
-- `fireIndex` - Fire weather index
-- `liquidAccumulation`, `snowAccumulation`, `iceAccumulation` - Precipitation by type
-- `rainIntensity`, `snowIntensity`, `iceIntensity` - Intensity by precipitation type
-- `currentDayIce`, `currentDayLiquid`, `currentDaySnow` - Accumulations for the current day
-- `dawnTime`, `duskTime` - Civil twilight times
-
-**New Metadata Fields:**
-- `sourceTimes` - Model update timestamps
-- `sourceIDX` - Grid coordinates for each model
-- `version` - API version
-- `processTime` - Request processing time
-- `ingestVersion` - Data ingest version
-- `nearestCity`, `nearestCountry`, `nearestSubNational` - Location information
 
 **Day/Night Forecast Block:**
 
@@ -234,7 +204,7 @@ for period in forecast.day_night.data:
     print(f"Time: {period.time}, Temp: {period.temperature}, Smoke: {period.smoke}")
 ```
 
-**Example accessing new fields:**
+**Example accessing fields:**
 
 ```python
 forecast = pirate_weather.get_forecast(latitude, longitude)
