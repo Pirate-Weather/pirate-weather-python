@@ -5,7 +5,7 @@ This library for the [Pirate Weather API](https://pirateweather.net) which is an
 API, and provides access to detailed
 weather information from around the globe.
 
-**Now supporting Pirate Weather API v3** with air quality data, convective indices, and the new `version`, `include`, `extraVars`, `icon` and `aqiunits` request parameters.
+**Now supporting Pirate Weather API v3** with air quality data, convective indices, and the new `version`, `include`, `extra_vars`, `icon` and `aqi_units` arguments.
 
 * [Installation](#installation)
 * [Get started](#get-started)
@@ -16,6 +16,8 @@ weather information from around the globe.
 ## This library was made by updating the [darksky library by Detrous](https://github.com/Detrous/darksky) so all credits go to them.
 
 ### Installation
+
+Requires Python 3.11 or newer.
 
 ```
 pip3 install pirateweather
