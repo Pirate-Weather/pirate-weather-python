@@ -1,7 +1,11 @@
-from enum import Enum
+"""Languages supported for text summaries."""
+
+from enum import StrEnum
 
 
-class Languages(str, Enum):
+class Languages(StrEnum):
+    """Languages supported for text summaries (``lang`` parameter)."""
+
     ARABIC = "ar"
     AZERBAIJANI = "az"
     BELARUSIAN = "be"
@@ -63,4 +67,5 @@ class Languages(str, Enum):
 
     @classmethod
     def list(cls):
-        return list(map(lambda c: c.value, cls))
+        """Return the values of every member."""
+        return [c.value for c in cls]

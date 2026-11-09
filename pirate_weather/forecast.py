@@ -1,7 +1,20 @@
+"""Models for the data blocks of a Pirate Weather API response."""
+
 from . import base
 
 
-class CurrentlyForecast(base.AutoInit):
+class _PrecipAccumulationAlias:
+    """Provide the old camelCase ``precipAccumulation`` attribute."""
+
+    @property
+    def precipAccumulation(self):  # noqa: N802
+        """Backwards-compatible alias for ``precip_accumulation``."""
+        return self.precip_accumulation
+
+
+class CurrentlyForecast(_PrecipAccumulationAlias, base.AutoInit):
+    """Current weather conditions at the requested location."""
+
     time: int
     summary: str = None
     icon: str
@@ -11,7 +24,7 @@ class CurrentlyForecast(base.AutoInit):
     precip_intensity_error: float
     precip_probability: float
     precip_type: str
-    precipAccumulation: float
+    precip_accumulation: float = None
     temperature: float
     apparent_temperature: float
     dew_point: float
@@ -40,9 +53,24 @@ class CurrentlyForecast(base.AutoInit):
     current_day_ice: float = None
     current_day_liquid: float = None
     current_day_snow: float = None
+    # New fields from API v3+
+    lifted_index: float = None
+    k_index: float = None
+    vertical_velocity: float = None
+    convective_inhibition: float = None
+    # Air quality fields (pollutant concentrations require include=airqualitydetails)
+    air_quality_index: float = None
+    pm25: float = None
+    pm10: float = None
+    ozone_concentration: float = None
+    no2_concentration: float = None
+    so2_concentration: float = None
+    co_concentration: float = None
 
 
 class MinutelyForecastItem(base.AutoInit):
+    """Precipitation forecast for a single minute."""
+
     time: int
     precip_intensity: float
     precip_intensity_error: float
@@ -55,11 +83,15 @@ class MinutelyForecastItem(base.AutoInit):
 
 
 class MinutelyForecast(base.BaseWeather):
+    """Minute-by-minute precipitation forecast for the next hour."""
+
     data: list[MinutelyForecastItem]
     data_class = MinutelyForecastItem
 
 
-class HourlyForecastItem(base.AutoInit):
+class HourlyForecastItem(_PrecipAccumulationAlias, base.AutoInit):
+    """Weather forecast for a single hour."""
+
     time: int
     summary: str = None
     icon: str
@@ -67,7 +99,7 @@ class HourlyForecastItem(base.AutoInit):
     precip_intensity_error: float = None
     precip_probability: float
     precip_type: str
-    precipAccumulation: float
+    precip_accumulation: float = None
     temperature: float
     apparent_temperature: float
     dew_point: float
@@ -95,14 +127,31 @@ class HourlyForecastItem(base.AutoInit):
     snow_intensity: float = None
     ice_intensity: float = None
     station_pressure: float = None
+    # New fields from API v3+
+    lifted_index: float = None
+    k_index: float = None
+    vertical_velocity: float = None
+    convective_inhibition: float = None
+    # Air quality fields (pollutant concentrations require include=airqualitydetails)
+    air_quality_index: float = None
+    pm25: float = None
+    pm10: float = None
+    ozone_concentration: float = None
+    no2_concentration: float = None
+    so2_concentration: float = None
+    co_concentration: float = None
 
 
 class HourlyForecast(base.BaseWeather):
+    """Hour-by-hour forecast for the next 48 hours (168 when extended)."""
+
     data: list[HourlyForecastItem]
     data_class = HourlyForecastItem
 
 
-class DailyForecastItem(base.AutoInit):
+class DailyForecastItem(_PrecipAccumulationAlias, base.AutoInit):
+    """Weather forecast for a single day."""
+
     time: int
     summary: str = None
     icon: str
@@ -114,7 +163,7 @@ class DailyForecastItem(base.AutoInit):
     precip_intensity_max_time: int
     precip_probability: float
     precip_type: str
-    precipAccumulation: float
+    precip_accumulation: float = None
     temperature_high: float
     temperature_high_time: int
     temperature_low: float
@@ -169,15 +218,35 @@ class DailyForecastItem(base.AutoInit):
     current_day_snow: float = None
     dawn_time: int = None
     dusk_time: int = None
+    # New fields from API v3+
+    precip_intensity_min: float = None
+    precip_intensity_min_time: int = None
+    lifted_index_min: float = None
+    lifted_index_min_time: int = None
+    k_index_max: float = None
+    k_index_max_time: int = None
+    vertical_velocity_min: float = None
+    vertical_velocity_min_time: int = None
+    convective_inhibition_max: float = None
+    convective_inhibition_max_time: int = None
+    air_quality_index: float = None
+    air_quality_index_max: float = None
+    air_quality_index_max_time: int = None
+    air_quality_index_min: float = None
+    air_quality_index_min_time: int = None
 
 
 class DailyForecast(base.BaseWeather):
+    """Day-by-day forecast for the next week."""
+
     data: list[DailyForecastItem]
     data_class = DailyForecastItem
 
 
 # DayNight block is similar to hourly but has some additional fields
-class DayNightForecastItem(base.AutoInit):
+class DayNightForecastItem(_PrecipAccumulationAlias, base.AutoInit):
+    """Weather forecast for a 12 hour day or night period."""
+
     time: int
     summary: str = None
     icon: str
@@ -185,7 +254,7 @@ class DayNightForecastItem(base.AutoInit):
     precip_intensity_max: float = None
     precip_probability: float
     precip_type: str
-    precipAccumulation: float
+    precip_accumulation: float = None
     temperature: float
     apparent_temperature: float
     dew_point: float
@@ -214,14 +283,31 @@ class DayNightForecastItem(base.AutoInit):
     snow_intensity_max: float = None
     ice_intensity_max: float = None
     station_pressure: float = None
+    # New fields from API v3+
+    lifted_index: float = None
+    k_index: float = None
+    vertical_velocity: float = None
+    convective_inhibition: float = None
+    # Air quality fields (pollutant concentrations require include=airqualitydetails)
+    air_quality_index: float = None
+    pm25: float = None
+    pm10: float = None
+    ozone_concentration: float = None
+    no2_concentration: float = None
+    so2_concentration: float = None
+    co_concentration: float = None
 
 
 class DayNightForecast(base.BaseWeather):
+    """Twice-daily forecast, requested with ``Include.DAY_NIGHT_FORECAST``."""
+
     data: list[DayNightForecastItem]
     data_class = DayNightForecastItem
 
 
 class Alert(base.AutoInit):
+    """A severe weather alert issued for the requested location."""
+
     title: str
     regions: list
     severity: str
@@ -232,6 +318,8 @@ class Alert(base.AutoInit):
 
 
 class Flags(base.AutoInit):
+    """Metadata about the request, such as the sources and units used."""
+
     sources: list[str]
     sources_class = str
     nearest__station: float
@@ -249,6 +337,8 @@ class Flags(base.AutoInit):
 
 
 class Forecast:
+    """A full Pirate Weather API response."""
+
     latitude: float
     longitude: float
     timezone: str
@@ -266,16 +356,17 @@ class Forecast:
         latitude: float,
         longitude: float,
         timezone: str,
-        currently: dict = None,
-        minutely: dict = None,
-        hourly: dict = None,
-        daily: dict = None,
-        day_night: dict = None,
-        alerts: [dict] = None,
-        flags: dict = None,
-        offset: int = None,
-        elevation: int = None,
+        currently: dict | None = None,
+        minutely: dict | None = None,
+        hourly: dict | None = None,
+        daily: dict | None = None,
+        day_night: dict | None = None,
+        alerts: list[dict] | None = None,
+        flags: dict | None = None,
+        offset: int | None = None,
+        elevation: int | None = None,
     ):
+        """Build the forecast blocks from the API response fields."""
         self.latitude = latitude
         self.longitude = longitude
         self.timezone = timezone

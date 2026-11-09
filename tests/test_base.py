@@ -1,3 +1,5 @@
+"""Tests for the base classes and helpers."""
+
 import os
 import sys
 
@@ -10,21 +12,26 @@ sys.path.insert(0, os.path.realpath(os.path.join(os.path.dirname(__file__), ".."
 
 
 def test_undo_snake_case_key():
+    """A snake_case key is converted to camelCase."""
     undo_key = undo_snake_case_key("snake_key")
     assert undo_key == "snakeKey"
 
 
 def test_undo_snake_case_key_one_item():
+    """A key without underscores is unchanged."""
     undo_key = undo_snake_case_key("key")
     assert undo_key == "key"
 
 
 def test_undo_snake_case_key_bad_value_type():
+    """A non string key raises an AssertionError."""
     with pytest.raises(AssertionError):
         undo_snake_case_key(1)
 
 
 def test_base_weather():
+    """BaseWeather builds its data points with ``data_class``."""
+
     class TestDataBaseWeather:
         def __init__(self, test_field, **kwargs):
             self.test_field = test_field
@@ -43,6 +50,8 @@ def test_base_weather():
 
 
 def test_auto_init():
+    """AutoInit sets annotated fields from the given params."""
+
     class TestAutoInit(AutoInit):
         field: str
 
@@ -51,6 +60,8 @@ def test_auto_init():
 
 
 def test_auto_init__field_exists_on_class_but_is_not_given_in_constructor():
+    """Annotated fields missing from the params are set to None."""
+
     class TestAutoInit(AutoInit):
         field: str
         other_field: int

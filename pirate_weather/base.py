@@ -1,3 +1,5 @@
+"""Base classes used to build forecast objects from API responses."""
+
 from datetime import datetime
 
 import pytz
@@ -6,11 +8,14 @@ from .utils import get_datetime_from_unix, undo_snake_case_key
 
 
 class BaseWeather:
+    """A data block made up of a summary, an icon and a list of data points."""
+
     summary: str
     icon: str
     data_class: object
 
     def __init__(self, summary=None, icon=None, data=None, timezone=None):
+        """Build the data points of the block using ``data_class``."""
         self.summary = summary
         self.icon = icon
 
@@ -20,14 +25,19 @@ class BaseWeather:
         ]
 
     def __repr__(self):
-        return "%s([%d])" % (self.__class__.__name__, len(self.data))
+        """Return the class name and the number of data points."""
+        return f"{self.__class__.__name__}([{len(self.data)}])"
 
     def __iter__(self):
+        """Iterate over the data points."""
         return iter(self.data)
 
 
 class AutoInit:
+    """Set every annotated attribute from the matching camelCase API field."""
+
     def __init__(self, **params):
+        """Populate the annotated fields from the API response ``params``."""
         try:
             timezone = pytz.timezone(params.pop("timezone", None))
         except (pytz.UnknownTimeZoneError, AttributeError, TypeError):
@@ -47,7 +57,9 @@ class AutoInit:
                 setattr(self, field, None)
 
     def __iter__(self):
+        """Iterate over ``(field, value)`` pairs."""
         return iter(self.__dict__.items())
 
     def __repr__(self):
-        return "%s(%s)" % (self.__class__.__name__, getattr(self, "time", ""))
+        """Return the class name and the time of the data point."""
+        return f"{self.__class__.__name__}({getattr(self, 'time', '')})"
